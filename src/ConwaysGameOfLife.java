@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -14,11 +15,15 @@ public class ConwaysGameOfLife extends JFrame {
 	private static final long serialVersionUID = -6266491134743609613L;
 	private Board board;
 	private JTextField input;
+	private JTextField tickRate;
 	private JPanel inputPanel;
 	private JButton start;
 	private JButton pause;
 	private JButton quit;
+	private JLabel genLabel;
+	private JLabel tickLabel;
 	private int generations = 0;
+	private int tick = 1;
 	private Thread game;
 	
 	public static void main(String args[]) {
@@ -39,8 +44,8 @@ public class ConwaysGameOfLife extends JFrame {
 		board = new Board();
 		board.setLayout(new BoxLayout(board, BoxLayout.Y_AXIS));
 		inputPanel = new JPanel();
-		
-		input = new JTextField(20);
+		tickRate = new JTextField(3);
+		input = new JTextField(3);
 		start = new JButton("Start");
 		start.addActionListener(e -> {
 			toggleGame(false);
@@ -53,10 +58,15 @@ public class ConwaysGameOfLife extends JFrame {
 		quit.addActionListener((e) -> {
 			System.exit(0);
 		});
+		tickLabel = new JLabel("Tick rate:");
+		genLabel = new JLabel("Number of generations:");
 		inputPanel.add(quit);
+		inputPanel.add(genLabel);
 		inputPanel.add(input);
 		inputPanel.add(start);
 		inputPanel.add(pause);
+		inputPanel.add(tickLabel);
+		inputPanel.add(tickRate);
 		add(BorderLayout.WEST,inputPanel);
 		board.setPreferredSize(new Dimension(400, 100));
 		add(BorderLayout.CENTER, board);
@@ -69,10 +79,14 @@ public class ConwaysGameOfLife extends JFrame {
 		if(pause) {
 			game.interrupt();
 		} else {
-			if(!input.getText().isEmpty()) {
+			if(!input.getText().isEmpty() && !tickRate.getText().isEmpty()) {
 				generations = Integer.parseInt(input.getText());
+				tick = Integer.parseInt(tickRate.getText());
+				tickRate.setText("");
+				input.setText("");
 				board.restart();
 				board.setGenerations(generations);
+				board.setTickRate(tick);
 			}
 			game = new Thread(board);
 			game.start();

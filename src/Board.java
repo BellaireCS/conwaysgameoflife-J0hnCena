@@ -21,6 +21,7 @@ public class Board extends JPanel implements Runnable{
 	public static final int MAX_LENGTH = 100;
 	private boolean isEven;
 	private int generations;
+	private int tickRate = 1;
 	public static final int TILE_SIZE = 10;
 	
 	/**
@@ -77,7 +78,7 @@ public class Board extends JPanel implements Runnable{
 			finished.set(0);
 			iter++;	
 			try {
-				Thread.sleep(1000/3);
+				Thread.sleep(1000/tickRate);
 			} catch (InterruptedException ex) {
 				return;
 			}
@@ -204,6 +205,20 @@ public class Board extends JPanel implements Runnable{
 	 */
 	public void setGenerations(int generations) {
 		this.generations = generations;
+	}
+
+	/**
+	 * @return the tickRate
+	 */
+	public int getTickRate() {
+		return tickRate;
+	}
+
+	/**
+	 * @param tickRate the tickRate to set
+	 */
+	public void setTickRate(int tickRate) {
+		this.tickRate = tickRate;
 	}
 
 }
