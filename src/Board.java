@@ -64,13 +64,20 @@ public class Board extends JPanel implements Runnable{
 				service.execute(new ConwayTask(r, isEven));
 			}
 			
-			while(finished.get() != MAX_LENGTH);
+			while(finished.get() != MAX_LENGTH) {
+				try{
+					//don't hog cpu
+					Thread.sleep(10);
+				} catch (InterruptedException ex) {
+					return;
+				}
+			}
 
 			this.repaint();
 			finished.set(0);
 			iter++;	
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(1000/3);
 			} catch (InterruptedException ex) {
 				return;
 			}
